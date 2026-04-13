@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brief Cipher Game Project - Ryan Menzildjian</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Archivo+Black&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        :root {
+            --project-primary: #000000;
+            --project-secondary: #000000;
+            --project-accent: #000000;
+            --project-accent-2: #000000;
+            --project-dark: #000000;
+            --project-light: #f6eee3;
+            --project-card-bg: #f6eee3;
+        }
+
+        body {
+            background: #f6eee3;
+            color: var(--project-dark);
+            margin: 0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .project-page-header {
+            background: #000000;
+            color: white;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: none;
+            opacity: 0;
+            transition: opacity 0.6s ease;
+        }
+
+        .project-page-header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .back-link {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 8px 16px;
+            border: 2px solid white;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            background: white;
+            color: var(--project-primary);
+        }
+
+        .project-page-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 50px 32px 60px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .project-page-info {
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            padding: 36px;
+            margin-bottom: 30px;
+        }
+
+        .project-page-info h2 {
+            margin: 0 0 24px;
+            color: var(--project-primary);
+            font-size: 32px;
+        }
+
+        .project-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 36px;
+        }
+
+        .project-info-column {
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .info-label {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #000000;
+        }
+
+        .info-value {
+            font-size: 17px;
+            line-height: 1.65;
+            color: var(--project-dark);
+        }
+
+        .info-value ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .info-value li {
+            margin-bottom: 4px;
+        }
+
+        .pdf-showcase {
+            margin-top: 28px;
+            padding: 20px;
+            border: none;
+            border-radius: 18px;
+            background: #f6eee3;
+        }
+
+        .pdf-showcase h3 {
+            margin: 0 0 16px;
+            font-size: 24px;
+            color: var(--project-primary);
+        }
+
+        .pdf-showcase-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(260px, 1fr));
+            gap: 18px;
+            align-items: start;
+        }
+
+        .pdf-card {
+            border: 2px solid #000000;
+            background: #ffffff;
+            box-shadow: none;
+            overflow: hidden;
+            border-radius: 14px;
+            display: flex;
+            flex-direction: column;
+            align-self: start;
+        }
+
+        .pdf-card.game-card {
+            grid-column: 1;
+            grid-row: 1;
+        }
+
+        .pdf-card.process-card {
+            grid-column: 2;
+            grid-row: 1;
+        }
+
+        .pdf-card.pamphlet-card {
+            grid-column: 1 / -1;
+            grid-row: 2;
+        }
+
+        .pdf-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            background: linear-gradient(90deg, rgba(237, 28, 36, 0.12) 0%, rgba(42, 126, 255, 0.16) 100%);
+            border-bottom: 1px solid #000000;
+        }
+
+        .pdf-card-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--project-dark);
+        }
+
+        .pdf-card-link {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--project-accent-2);
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .pdf-card-link:hover {
+            text-decoration: underline;
+        }
+
+        .pdf-embed {
+            width: 100%;
+            height: 420px;
+            border: 0;
+            background: #ffffff;
+        }
+
+        .pdf-reader {
+            position: relative;
+            width: 100%;
+            max-width: 760px;
+            margin: 0 auto;
+            aspect-ratio: var(--doc-aspect, 8 / 11);
+            height: auto;
+            background: #ffffff;
+            border-top: 1px solid #000000;
+            overflow: hidden;
+            border-bottom-left-radius: 14px;
+            border-bottom-right-radius: 14px;
+            cursor: ew-resize;
+            touch-action: none;
+        }
+
+        .doc-page-img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            background: #ffffff;
+            object-fit: contain;
+            pointer-events: none;
+            user-select: none;
+            -webkit-user-drag: none;
+            user-drag: none;
+        }
+
+        .pdf-page-indicator {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            z-index: 4;
+            font-size: 9px;
+            font-weight: 600;
+            color: #000000;
+            background: rgba(246, 238, 227, 0.82);
+            border: 1px solid rgba(0, 0, 0, 0.6);
+            padding: 2px 6px;
+            border-radius: 6px;
+            pointer-events: none;
+        }
+
+        .doc-action-btn {
+            font-size: 12px;
+            font-weight: 700;
+            color: #000000;
+            background: #f6eee3;
+            border: 1px solid #000000;
+            padding: 6px 10px;
+            cursor: pointer;
+        }
+
+        .doc-action-btn:hover {
+            background: #000000;
+            color: #f6eee3;
+        }
+
+        .pamphlet-stage {
+            perspective: 1400px;
+            height: 420px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background:
+                radial-gradient(circle at 50% 20%, rgba(255, 255, 255, 0.45) 0%, rgba(226, 212, 194, 0.88) 42%, rgba(0, 0, 0, 0.15) 100%);
+            padding: 10px;
+            cursor: grab;
+            border-bottom-left-radius: 14px;
+            border-bottom-right-radius: 14px;
+            --tilt-x: 0deg;
+            --tilt-y: 0deg;
+            --open-progress: 0;
+            --side-progress: 0;
+            --page-turn: 0deg;
+            touch-action: none;
+        }
+
+        .pdf-card.pamphlet-card .pamphlet-stage {
+            height: 420px;
+        }
+
+        .pamphlet-stage.dragging {
+            cursor: grabbing;
+        }
+
+        .pamphlet-fold {
+            position: absolute;
+            inset: 0;
+            margin: auto;
+            width: min(90%, 980px);
+            height: min(72%, 320px);
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 0;
+            transform-style: preserve-3d;
+            transform: rotateX(var(--tilt-x)) rotateY(var(--tilt-y));
+            transition: transform 0.2s ease, opacity 0.2s ease;
+            will-change: transform;
+        }
+
+        .pamphlet-fold.outside {
+            opacity: calc(1 - var(--side-progress));
+        }
+
+        .pamphlet-fold.inside {
+            opacity: var(--side-progress);
+        }
+
+        .pamphlet-panel {
+            position: relative;
+            overflow: hidden;
+            border: none;
+            background: transparent;
+            transform-origin: center center;
+            transition: transform 0.18s linear, filter 0.18s linear, box-shadow 0.18s linear;
+            backface-visibility: hidden;
+            transform-style: preserve-3d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pamphlet-stage.dragging .pamphlet-fold,
+        .pamphlet-stage.dragging .pamphlet-panel {
+            transition: none;
+        }
+
+        .pamphlet-panel img {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            background: transparent;
+            object-fit: contain;
+            display: block;
+            pointer-events: none;
+            user-select: none;
+            -webkit-user-drag: none;
+            user-drag: none;
+        }
+
+        .pamphlet-hint {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            z-index: 3;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 5px 8px;
+            border: 1px solid #000000;
+            background: rgba(246, 238, 227, 0.94);
+            color: #000000;
+        }
+
+        .pamphlet-state-dots {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            z-index: 3;
+            display: flex;
+            gap: 6px;
+            padding: 5px 8px;
+            border: 1px solid #000000;
+            background: rgba(246, 238, 227, 0.94);
+        }
+
+        .pamphlet-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            border: 1px solid #000000;
+            background: transparent;
+            opacity: 0.7;
+            transition: transform 0.2s ease, background 0.2s ease, opacity 0.2s ease;
+        }
+
+        .pamphlet-dot.active {
+            background: #000000;
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        .pamphlet-drag-tip {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 4;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 6px 10px;
+            border: 1px solid #000000;
+            background: rgba(246, 238, 227, 0.95);
+            color: #000000;
+            white-space: nowrap;
+        }
+
+        .pamphlet-drag-tip::after {
+            content: '↔';
+            display: inline-block;
+            margin-left: 6px;
+            animation: dragHintSlide 1.2s ease-in-out infinite;
+        }
+
+        @keyframes dragHintSlide {
+            0%, 100% { transform: translateX(-4px); opacity: 0.7; }
+            50% { transform: translateX(4px); opacity: 1; }
+        }
+
+        .pamphlet-panel-left,
+        .pamphlet-panel-right {
+            cursor: ew-resize;
+        }
+
+        .pamphlet-panel-center {
+            cursor: pointer;
+        }
+
+        .pamphlet-fold .pamphlet-panel-left {
+            transform-origin: right center;
+            transform: rotateY(calc((1 - var(--open-progress)) * -48deg)) translateX(calc((1 - var(--open-progress)) * 0%));
+            filter: brightness(0.82);
+        }
+
+        .pamphlet-fold .pamphlet-panel-center {
+            transform: scale(1.02);
+            z-index: 3;
+        }
+
+        .pamphlet-fold .pamphlet-panel-right {
+            transform-origin: left center;
+            transform: rotateY(calc((1 - var(--open-progress)) * 48deg)) translateX(calc((1 - var(--open-progress)) * 0%));
+            filter: brightness(0.82);
+        }
+
+        .pamphlet-stage .pamphlet-panel-left,
+        .pamphlet-stage .pamphlet-panel-center,
+        .pamphlet-stage .pamphlet-panel-right {
+            filter: brightness(1);
+        }
+
+        .pamphlet-fold.outside .pamphlet-panel-center {
+            transform: scale(1.02) rotateY(var(--page-turn));
+        }
+
+        .pamphlet-fold.inside .pamphlet-panel-center {
+            transform: scale(1.02) rotateY(calc(var(--page-turn) * -1));
+        }
+
+        .pamphlet-stage .pamphlet-panel:hover {
+            box-shadow: none;
+            filter: brightness(1.03);
+        }
+
+        .statement-toggle-wrap {
+            margin-top: 16px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .statement-card {
+            margin-top: 14px;
+        }
+
+        .statement-card.hidden {
+            display: none;
+        }
+
+        .palette-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .swatch {
+            width: 54px;
+            height: 28px;
+            border-radius: 999px;
+            border: 1px solid rgba(35, 31, 32, 0.25);
+        }
+
+        @media (max-width: 1000px) {
+            .project-info-grid,
+            .pdf-showcase-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pdf-card.game-card,
+            .pdf-card.process-card,
+            .pdf-card.pamphlet-card {
+                grid-column: auto;
+                grid-row: auto;
+            }
+
+            .pdf-card.pamphlet-card .pamphlet-stage {
+                height: 420px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="project-page-header">
+        <h1>Brief Cipher Game Project</h1>
+        <a href="index.html" class="back-link" id="back-to-portfolio">← Back to Portfolio</a>
+    </header>
+
+    <div class="project-page-content">
+        <div class="project-page-info">
+            <h2>Project Details</h2>
+            <div class="project-info-grid">
+                <div class="project-info-column">
+                    <div class="info-item">
+                        <div class="info-label">Services</div>
+                        <div class="info-value">
+                            <ul>
+                                <li>Game System Design</li>
+                                <li>Visual Identity</li>
+                                <li>Print Collateral + Packaging</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Client</div>
+                        <div class="info-value">BA Studio Project</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Location</div>
+                        <div class="info-value">Binghamton, NY</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Year</div>
+                        <div class="info-value">2025</div>
+                    </div>
+                </div>
+                <div class="project-info-column">
+                    <div class="info-item">
+                        <div class="info-label">Credits</div>
+                        <div class="info-value">Concept, rules design, visual identity, and production mockups by Ryan Menzildjian. The game takes inspiration from Codenames and Pictionary and turns it into a design-thinking activity with cards, rule pamphlets, and physical components.</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Info</div>
+                        <div class="info-value">Brief Cipher is a fast team game where a Lead Designer gets 60 seconds to sketch selected process cards from a shared 5x5 grid. Teammates guess the clue, score by difficulty, and learn design language through play. After critique, I shifted the system from concept cards to process-focused cards and refined typography, color, and layout for quick readability.</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Project Palette</div>
+                        <div class="info-value">
+                            Full Brief Cipher palette:
+                            <div class="palette-row" aria-label="Brief Cipher color palette">
+                                <div class="swatch" title="#231F20" style="background:#231F20;"></div>
+                                <div class="swatch" title="#F6EEE3" style="background:#F6EEE3;"></div>
+                                <div class="swatch" title="#2E3192" style="background:#2E3192;"></div>
+                                <div class="swatch" title="#8B5E3C" style="background:#8B5E3C;"></div>
+                                <div class="swatch" title="#957351" style="background:#957351;"></div>
+                                <div class="swatch" title="#A97C50" style="background:#A97C50;"></div>
+                                <div class="swatch" title="#A7A9AC" style="background:#A7A9AC;"></div>
+                                <div class="swatch" title="#ED1C24" style="background:#ED1C24;"></div>
+                                <div class="swatch" title="#EF4136" style="background:#EF4136;"></div>
+                                <div class="swatch" title="#FF3F3F" style="background:#FF3F3F;"></div>
+                                <div class="swatch" title="#2A7EFF" style="background:#2A7EFF;"></div>
+                                <div class="swatch" title="#FFDB3C" style="background:#FFDB3C;"></div>
+                                <div class="swatch" title="#A0FF3F" style="background:#A0FF3F;"></div>
+                                <div class="swatch" title="#FFBFBB" style="background:#FFBFBB;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <section class="pdf-showcase">
+                <h3>Live Project Documents</h3>
+                <div class="pdf-showcase-grid">
+                    <article class="pdf-card game-card">
+                        <div class="pdf-card-header">
+                            <span class="pdf-card-title">Game Deck + Overview</span>
+                            <span class="pdf-card-link">Drag or scroll to change page</span>
+                        </div>
+                        <div class="pdf-reader" data-prefix="Brief Cipher Game Project/310_P3_Menzildjian_Game_page-" data-pages="4" data-label="Game Deck + Overview">
+                            <img class="doc-page-img" alt="Brief Cipher game PDF page viewer">
+                            <div class="pdf-page-indicator">Page 1 / 4</div>
+                        </div>
+                    </article>
+                    <article class="pdf-card pamphlet-card">
+                        <div class="pdf-card-header">
+                            <span class="pdf-card-title">Rules Pamphlet (Interactive)</span>
+                            <span class="pdf-card-link">Drag horizontally to open/flip sides</span>
+                        </div>
+                        <div class="pamphlet-stage" id="pamphlet-stage" data-open="false">
+                            <div class="pamphlet-drag-tip">Drag left or right</div>
+                            <div class="pamphlet-fold outside" id="pamphlet-side-outside">
+                                <div class="pamphlet-panel pamphlet-panel-left">
+                                    <img src="Brief Cipher Game Project/310_P3_Menzildjian_Rules_page-0001.jpg" alt="Rules pamphlet page 1">
+                                </div>
+                                <div class="pamphlet-panel pamphlet-panel-center">
+                                    <img src="Brief Cipher Game Project/310_P3_Menzildjian_Rules_page-0002.jpg" alt="Rules pamphlet page 2">
+                                </div>
+                                <div class="pamphlet-panel pamphlet-panel-right">
+                                    <img src="Brief Cipher Game Project/310_P3_Menzildjian_Rules_page-0003.jpg" alt="Rules pamphlet page 3">
+                                </div>
+                            </div>
+                            <div class="pamphlet-fold inside" id="pamphlet-side-inside">
+                                <div class="pamphlet-panel pamphlet-panel-left">
+                                    <img src="Brief Cipher Game Project/310_P3_Menzildjian_Rules_page-0004.jpg" alt="Rules pamphlet page 4">
+                                </div>
+                                <div class="pamphlet-panel pamphlet-panel-center">
+                                    <img src="Brief Cipher Game Project/310_P3_Menzildjian_Rules_page-0005.jpg" alt="Rules pamphlet page 5">
+                                </div>
+                                <div class="pamphlet-panel pamphlet-panel-right">
+                                    <img src="Brief Cipher Game Project/310_P3_Menzildjian_Rules_page-0006.jpg" alt="Rules pamphlet page 6">
+                                </div>
+                            </div>
+                            <div class="pamphlet-hint" id="pamphlet-hint">Outside: p1-p3</div>
+                            <div class="pamphlet-state-dots" aria-hidden="true">
+                                <span class="pamphlet-dot" id="pamphlet-dot-0"></span>
+                                <span class="pamphlet-dot" id="pamphlet-dot-1"></span>
+                                <span class="pamphlet-dot" id="pamphlet-dot-2"></span>
+                            </div>
+                        </div>
+                    </article>
+                    <article class="pdf-card process-card">
+                        <div class="pdf-card-header">
+                            <span class="pdf-card-title">Process Book</span>
+                            <span class="pdf-card-link">Drag or scroll to change page</span>
+                        </div>
+                        <div class="pdf-reader" data-prefix="Brief Cipher Game Project/310_P3_Menzildjian_Process_page-" data-pages="10" data-label="Process Book">
+                            <img class="doc-page-img" alt="Brief Cipher process PDF page viewer">
+                            <div class="pdf-page-indicator">Page 1 / 10</div>
+                        </div>
+                    </article>
+                </div>
+                <div class="statement-toggle-wrap">
+                    <button type="button" class="doc-action-btn" id="toggle-statement">Show Project Statement</button>
+                </div>
+                <article class="pdf-card statement-card hidden" id="statement-card">
+                    <div class="pdf-card-header">
+                        <span class="pdf-card-title">Project Statement</span>
+                        <span class="pdf-card-link">Drag or scroll to change page</span>
+                    </div>
+                    <div class="pdf-reader" data-prefix="Brief Cipher Game Project/310_P3_Menzildjian_Statement_page-" data-pages="2" data-label="Project Statement">
+                        <img class="doc-page-img" alt="Brief Cipher statement PDF page viewer">
+                        <div class="pdf-page-indicator">Page 1 / 2</div>
+                    </div>
+                </article>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const content = document.querySelector('.project-page-content');
+            const header = document.querySelector('.project-page-header');
+
+            if (sessionStorage.getItem('pageTransitioning') === 'true') {
+                if (content) {
+                    content.style.opacity = '0';
+                    content.style.transform = 'translateY(20px)';
+                }
+                if (header) {
+                    header.style.opacity = '0';
+                }
+
+                setTimeout(() => {
+                    if (content) {
+                        content.style.opacity = '1';
+                        content.style.transform = 'translateY(0)';
+                    }
+                    if (header) {
+                        header.style.opacity = '1';
+                    }
+                }, 100);
+                sessionStorage.removeItem('pageTransitioning');
+            } else {
+                requestAnimationFrame(() => {
+                    if (content) {
+                        content.style.opacity = '1';
+                        content.style.transform = 'translateY(0)';
+                    }
+                    if (header) {
+                        header.style.opacity = '1';
+                    }
+                });
+            }
+
+            const pamphletStage = document.getElementById('pamphlet-stage');
+            const pamphletOutside = document.getElementById('pamphlet-side-outside');
+            const pamphletInside = document.getElementById('pamphlet-side-inside');
+            const pamphletHint = document.getElementById('pamphlet-hint');
+            if (pamphletStage && pamphletOutside && pamphletInside) {
+                const states = [
+                    { open: 0, side: 0, hint: 'Closed cover (drag left to open)' },
+                    { open: 1, side: 0, hint: 'Outside: p1-p3 (drag left for inside)' },
+                    { open: 1, side: 1, hint: 'Inside: p4-p6 (drag right for outside)' }
+                ];
+
+                let stateIndex = 1;
+                let openProgress = states[stateIndex].open;
+                let sideProgress = states[stateIndex].side;
+                let pageTurnDeg = 0;
+                let dragStartX = 0;
+                let dragStartY = 0;
+                let dragFromState = stateIndex;
+                let dragToState = stateIndex;
+                let dragProgress = 0;
+                let draggingPamphlet = false;
+                let rafPending = false;
+                const dots = [
+                    document.getElementById('pamphlet-dot-0'),
+                    document.getElementById('pamphlet-dot-1'),
+                    document.getElementById('pamphlet-dot-2')
+                ];
+
+                function syncPamphletHint() {
+                    if (!pamphletHint) {
+                        return;
+                    }
+                    pamphletHint.textContent = states[stateIndex].hint;
+                }
+
+                function syncDots() {
+                    dots.forEach((dot, index) => {
+                        if (!dot) {
+                            return;
+                        }
+                        dot.classList.toggle('active', index === stateIndex);
+                    });
+                }
+
+                function applyPamphletState() {
+                    pamphletStage.style.setProperty('--open-progress', String(openProgress));
+                    pamphletStage.style.setProperty('--side-progress', String(sideProgress));
+                    pamphletStage.style.setProperty('--page-turn', `${pageTurnDeg.toFixed(2)}deg`);
+                    pamphletStage.setAttribute('data-open', openProgress > 0.6 ? 'true' : 'false');
+                    pamphletOutside.style.pointerEvents = sideProgress < 0.5 ? 'auto' : 'none';
+                    pamphletInside.style.pointerEvents = sideProgress >= 0.5 ? 'auto' : 'none';
+                    syncPamphletHint();
+                    syncDots();
+                }
+
+                function clamp(value, min, max) {
+                    return Math.max(min, Math.min(max, value));
+                }
+
+                function lerp(start, end, t) {
+                    return start + (end - start) * t;
+                }
+
+                function goToState(nextIndex) {
+                    stateIndex = clamp(nextIndex, 0, states.length - 1);
+                    openProgress = states[stateIndex].open;
+                    sideProgress = states[stateIndex].side;
+                    pageTurnDeg = 0;
+                    applyPamphletState();
+                }
+
+                pamphletStage.addEventListener('pointerdown', (event) => {
+                    dragStartX = event.clientX;
+                    dragStartY = event.clientY;
+                    dragFromState = stateIndex;
+                    dragToState = stateIndex;
+                    dragProgress = 0;
+                    draggingPamphlet = true;
+                    pamphletStage.classList.add('dragging');
+                    event.preventDefault();
+                    if (pamphletStage.setPointerCapture) {
+                        pamphletStage.setPointerCapture(event.pointerId);
+                    }
+                });
+
+                pamphletStage.addEventListener('pointermove', (event) => {
+                    if (!draggingPamphlet) {
+                        return;
+                    }
+                    const deltaX = event.clientX - dragStartX;
+                    const deltaY = event.clientY - dragStartY;
+                    if (Math.abs(deltaY) > Math.abs(deltaX) + 16) {
+                        return;
+                    }
+                    event.preventDefault();
+
+                    const direction = deltaX < 0 ? 1 : -1;
+                    dragToState = clamp(dragFromState + direction, 0, states.length - 1);
+                    dragProgress = clamp(Math.abs(deltaX) / 165, 0, 1);
+
+                    const from = states[dragFromState];
+                    const to = states[dragToState];
+                    openProgress = lerp(from.open, to.open, dragProgress);
+                    sideProgress = lerp(from.side, to.side, dragProgress);
+
+                    if ((dragFromState === 1 && dragToState === 2) || (dragFromState === 2 && dragToState === 1)) {
+                        pageTurnDeg = clamp((direction < 0 ? -1 : 1) * dragProgress * 38, -38, 38);
+                    } else {
+                        pageTurnDeg = clamp((direction < 0 ? -1 : 1) * dragProgress * 18, -18, 18);
+                    }
+
+                    if (!rafPending) {
+                        rafPending = true;
+                        requestAnimationFrame(() => {
+                            applyPamphletState();
+                            rafPending = false;
+                        });
+                    }
+                });
+
+                function endPamphletDrag() {
+                    if (!draggingPamphlet) {
+                        return;
+                    }
+                    draggingPamphlet = false;
+                    pamphletStage.classList.remove('dragging');
+                    if (dragProgress > 0.33) {
+                        goToState(dragToState);
+                    } else {
+                        goToState(dragFromState);
+                    }
+                }
+
+                pamphletStage.addEventListener('pointerup', endPamphletDrag);
+                pamphletStage.addEventListener('pointercancel', endPamphletDrag);
+
+                pamphletStage.addEventListener('mousemove', (event) => {
+                    const rect = pamphletStage.getBoundingClientRect();
+                    const x = (event.clientX - rect.left) / rect.width;
+                    const y = (event.clientY - rect.top) / rect.height;
+                    const tiltY = ((x - 0.5) * 8).toFixed(2);
+                    const tiltX = ((0.5 - y) * 6).toFixed(2);
+                    pamphletStage.style.setProperty('--tilt-y', `${tiltY}deg`);
+                    pamphletStage.style.setProperty('--tilt-x', `${tiltX}deg`);
+                });
+
+                pamphletStage.addEventListener('mouseleave', () => {
+                    pamphletStage.style.setProperty('--tilt-y', '0deg');
+                    pamphletStage.style.setProperty('--tilt-x', '0deg');
+                    endPamphletDrag();
+                });
+
+                applyPamphletState();
+            }
+
+            document.querySelectorAll('.pamphlet-panel img').forEach((img) => {
+                img.setAttribute('draggable', 'false');
+                img.addEventListener('dragstart', (event) => event.preventDefault());
+            });
+
+            const statementCard = document.getElementById('statement-card');
+            const statementToggle = document.getElementById('toggle-statement');
+            if (statementCard && statementToggle) {
+                statementToggle.addEventListener('click', () => {
+                    const isHidden = statementCard.classList.contains('hidden');
+                    statementCard.classList.toggle('hidden');
+                    statementToggle.textContent = isHidden ? 'Hide Project Statement' : 'Show Project Statement';
+                });
+            }
+
+            const pdfReaders = document.querySelectorAll('.pdf-reader');
+            pdfReaders.forEach((reader) => {
+                const pageImage = reader.querySelector('.doc-page-img');
+                const indicator = reader.querySelector('.pdf-page-indicator');
+                const pagePrefix = reader.getAttribute('data-prefix');
+                const totalPages = Number(reader.getAttribute('data-pages') || '1');
+                let currentPage = 1;
+                let dragStartX = 0;
+                let dragging = false;
+                let lastWheelAt = 0;
+                let lastLoadedPage = -1;
+
+                function updateFrame() {
+                    if (!pageImage || !pagePrefix) {
+                        return;
+                    }
+                    if (currentPage === lastLoadedPage) {
+                        return;
+                    }
+                    const paddedPage = String(currentPage).padStart(4, '0');
+                    pageImage.src = `${pagePrefix}${paddedPage}.jpg`;
+                    pageImage.onload = () => {
+                        if (pageImage.naturalWidth > 0 && pageImage.naturalHeight > 0) {
+                            reader.style.setProperty('--doc-aspect', `${pageImage.naturalWidth} / ${pageImage.naturalHeight}`);
+                        }
+                    };
+                    lastLoadedPage = currentPage;
+                    if (indicator) {
+                        indicator.textContent = `Page ${currentPage} / ${totalPages}`;
+                    }
+                }
+
+                function goPrev() {
+                    currentPage = Math.max(1, currentPage - 1);
+                    updateFrame();
+                }
+
+                function goNext() {
+                    currentPage = Math.min(totalPages, currentPage + 1);
+                    updateFrame();
+                }
+
+                reader.addEventListener('pointerdown', (event) => {
+                    dragging = true;
+                    dragStartX = event.clientX;
+                    if (reader.setPointerCapture) {
+                        reader.setPointerCapture(event.pointerId);
+                    }
+                });
+
+                reader.addEventListener('pointerup', (event) => {
+                    if (!dragging) {
+                        return;
+                    }
+                    const deltaX = event.clientX - dragStartX;
+                    if (deltaX > 45) {
+                        goPrev();
+                    } else if (deltaX < -45) {
+                        goNext();
+                    } else {
+                        const rect = reader.getBoundingClientRect();
+                        const relativeX = event.clientX - rect.left;
+                        if (relativeX < rect.width * 0.4) {
+                            goPrev();
+                        } else if (relativeX > rect.width * 0.6) {
+                            goNext();
+                        }
+                    }
+                    dragging = false;
+                });
+
+                reader.addEventListener('pointercancel', () => {
+                    dragging = false;
+                });
+
+                reader.addEventListener('wheel', (event) => {
+                    event.preventDefault();
+                    const now = Date.now();
+                    if (now - lastWheelAt < 220) {
+                        return;
+                    }
+                    const delta = Math.abs(event.deltaY) > Math.abs(event.deltaX) ? event.deltaY : event.deltaX;
+                    if (delta > 0) {
+                        goNext();
+                    } else if (delta < 0) {
+                        goPrev();
+                    }
+                    lastWheelAt = now;
+                }, { passive: false });
+
+                updateFrame();
+            });
+        });
+    </script>
+    <script src="image-compat.js"></script>
+</body>
+</html>

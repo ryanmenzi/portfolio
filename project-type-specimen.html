@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Type Specimen - Ryan Menzildjian</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Archivo+Black&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        :root {
+            --project-primary: #241f22;
+            --project-secondary: #00abeb;
+            --project-accent: #e60189;
+            --project-dark: #1a1618;
+            --project-light: #e6f7fd;
+            --theme-primary: #241f22;
+            --theme-secondary: #00abeb;
+            --theme-accent: #e60189;
+            --theme-text: #ffffff;
+            --theme-bg-muted: #e6f7fd;
+        }
+
+        .color-theme-primary { background-color: var(--project-primary); }
+        .color-theme-secondary { background-color: var(--project-secondary); }
+        .color-theme-accent { background-color: var(--project-accent); }
+
+        body {
+            background: var(--theme-bg-muted);
+            color: var(--project-dark);
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            overflow-y: auto;
+            min-height: 100vh;
+            height: auto;
+            transition: background 0.6s ease, color 0.6s ease;
+        }
+        
+        html {
+            height: auto;
+            overflow-x: hidden;
+        }
+
+        .project-page-content {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .project-page-header {
+            opacity: 0;
+            transition: opacity 0.6s ease;
+        }
+
+        .project-page-header {
+            background: var(--theme-primary);
+            color: var(--theme-text);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transition: opacity 0.6s ease, background 0.6s ease, color 0.6s ease;
+        }
+
+        .project-page-header h1 {
+            margin: 0;
+            color: var(--theme-text);
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .back-link {
+            color: var(--theme-text);
+            text-decoration: none;
+            font-size: 16px;
+            padding: 8px 16px;
+            border: 2px solid var(--theme-text);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            background: var(--theme-text);
+            color: var(--theme-primary);
+        }
+
+        .project-page-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+
+        .project-page-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+            perspective: 1200px;
+        }
+
+        .project-page-image {
+            width: 100%;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.5s ease;
+            transform-style: preserve-3d;
+            cursor: zoom-in;
+        }
+
+        .project-page-image:hover {
+            transform: translateY(-15px) rotateX(8deg) rotateY(-8deg) scale(1.05);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25), 0 0 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .project-page-info {
+            background: transparent;
+            padding: 40px;
+            margin-bottom: 30px;
+            border: none;
+        }
+        
+        /* Image Zoom Modal */
+        .image-modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            cursor: zoom-out;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .image-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 1;
+        }
+        
+        .image-modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            animation: zoomIn 0.3s ease;
+        }
+        
+        @keyframes zoomIn {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        
+        .image-modal-close {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 10001;
+            transition: transform 0.2s ease;
+        }
+        
+        .image-modal-close:hover {
+            transform: scale(1.2);
+        }
+
+        .project-page-info h2 {
+            color: var(--project-primary);
+            font-size: 32px;
+            margin-bottom: 30px;
+        }
+
+        .project-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .project-info-column {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .info-label {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--project-secondary);
+            opacity: 1;
+        }
+
+        .info-value {
+            font-size: 18px;
+            line-height: 1.6;
+            color: var(--project-dark);
+        }
+
+        .info-value ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .info-value li {
+            margin-bottom: 4px;
+        }
+
+        .project-page-links {
+            display: flex;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .project-page-link {
+            padding: 12px 24px;
+            background: var(--project-accent);
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .project-page-link:hover {
+            background: var(--project-secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 171, 235, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <header class="project-page-header">
+        <h1>Type Specimen</h1>
+        <a href="index.html" class="back-link" id="back-to-portfolio">← Back to Portfolio</a>
+    </header>
+
+    <div class="project-page-content">
+        <div class="project-page-gallery">
+            <img src="Type Specimen/TypePost1.png" alt="Type Specimen Post 1" class="project-page-image">
+            <img src="Type Specimen/TypePost2.png" alt="Type Specimen Post 2" class="project-page-image">
+            <img src="Type Specimen/TypePost3.png" alt="Type Specimen Post 3" class="project-page-image">
+        </div>
+
+        <div class="project-page-info">
+            <h2>Project Details</h2>
+            <div class="project-info-grid">
+                <div class="project-info-column">
+                    <div class="info-item">
+                        <div class="info-label">Services</div>
+                        <div class="info-value">
+                            <ul>
+                                <li>Digital</li>
+                                <li>Typography System</li>
+                                <li>Editorial Composition</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Client</div>
+                        <div class="info-value">BA Studio Project</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Location</div>
+                        <div class="info-value">Binghamton, NY</div>
+                    </div>
+                </div>
+                <div class="project-info-column">
+                    <div class="info-item">
+                        <div class="info-label">Year</div>
+                        <div class="info-value">2025</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Credits</div>
+                        <div class="info-value">Concept and design by Ryan Menzildjian. The project includes type-focused posters, social posts, and a specimen spread to test the typeface at different scales and formats.</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Info</div>
+                        <div class="info-value">The goal was to show personality without losing readability. I used contrast, rhythm, and grid structure to keep expressive display moments in balance with clean body text so the work can function as both campaign graphics and a polished publication spread.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="project-page-links">
+                <a href="Type Specimen/snugsharpspread.pdf" target="_blank" class="project-page-link">View Type Spread</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Page fade-in on load
+        document.addEventListener('DOMContentLoaded', () => {
+            const content = document.querySelector('.project-page-content');
+            const header = document.querySelector('.project-page-header');
+            
+            if (sessionStorage.getItem('pageTransitioning') === 'true') {
+                if (content) {
+                    content.style.opacity = '0';
+                    content.style.transform = 'translateY(20px)';
+                }
+                if (header) {
+                    header.style.opacity = '0';
+                }
+                
+                setTimeout(() => {
+                    if (content) {
+                        content.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                        content.style.opacity = '1';
+                        content.style.transform = 'translateY(0)';
+                    }
+                    if (header) {
+                        header.style.transition = 'opacity 0.6s ease';
+                        header.style.opacity = '1';
+                    }
+                }, 100);
+                
+                sessionStorage.removeItem('pageTransitioning');
+            } else {
+                if (content) {
+                    requestAnimationFrame(() => {
+                        content.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                        content.style.opacity = '1';
+                        content.style.transform = 'translateY(0)';
+                    });
+                }
+                if (header) {
+                    requestAnimationFrame(() => {
+                        header.style.transition = 'opacity 0.6s ease';
+                        header.style.opacity = '1';
+                    });
+                }
+            }
+        });
+
+        // 3D hover effect and click-to-zoom
+        document.addEventListener('DOMContentLoaded', () => {
+            const projectImages = document.querySelectorAll('.project-page-image');
+            const modal = document.createElement('div');
+            modal.className = 'image-modal';
+            const modalImg = document.createElement('img');
+            modalImg.className = 'image-modal-content';
+            const closeBtn = document.createElement('span');
+            closeBtn.className = 'image-modal-close';
+            closeBtn.innerHTML = '&times;';
+            modal.appendChild(modalImg);
+            modal.appendChild(closeBtn);
+            document.body.appendChild(modal);
+            
+            const closeModal = () => {
+                modal.classList.remove('active');
+                setTimeout(() => {
+                    modal.style.display = 'none';
+                }, 300);
+            };
+            
+            closeBtn.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+            
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.classList.contains('active')) {
+                    closeModal();
+                }
+            });
+            
+            projectImages.forEach(image => {
+                image.addEventListener('mousemove', (e) => {
+                    const rect = image.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    
+                    const rotateX = ((y - centerY) / centerY) * -12;
+                    const rotateY = ((x - centerX) / centerX) * 12;
+                    
+                    image.style.transform = `translateY(-15px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+                });
+                
+                image.addEventListener('mouseleave', () => {
+                    image.style.transform = '';
+                });
+                
+                image.addEventListener('click', () => {
+                    modalImg.src = image.src;
+                    modal.style.display = 'flex';
+                    requestAnimationFrame(() => {
+                        modal.classList.add('active');
+                    });
+                });
+            });
+        });
+
+        // Extract multiple colors from project images and find contrasting ones
+        function extractColorsFromImage(img) {
+            return new Promise((resolve, reject) => {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = 400;
+                canvas.height = 400;
+                
+                const loadHandler = function() {
+                    try {
+                        ctx.drawImage(img, 0, 0, 400, 400);
+                        const imageData = ctx.getImageData(0, 0, 400, 400);
+                        const data = imageData.data;
+                        
+                        const colorMap = new Map();
+                        const centerX = 200;
+                        const centerY = 200;
+                        const radius = 150;
+                        
+                        for (let y = 0; y < 400; y += 8) {
+                            for (let x = 0; x < 400; x += 8) {
+                                const distFromCenter = Math.sqrt((x - centerX) ** 2 + (y - centerY) ** 2);
+                                if (distFromCenter > radius) continue;
+                                
+                                const idx = (y * 400 + x) * 4;
+                                const r = data[idx];
+                                const g = data[idx + 1];
+                                const b = data[idx + 2];
+                                const a = data[idx + 3];
+                                
+                                if (a < 200) continue;
+                                
+                                const max = Math.max(r, g, b);
+                                const min = Math.min(r, g, b);
+                                const saturation = max === 0 ? 0 : (max - min) / max;
+                                
+                                const brightness = (r + g + b) / 3;
+                                if (brightness < 30 || brightness > 225) continue;
+                                if (saturation < 0.15) continue;
+                                
+                                const qr = Math.floor(r / 30) * 30;
+                                const qg = Math.floor(g / 30) * 30;
+                                const qb = Math.floor(b / 30) * 30;
+                                const key = `${qr},${qg},${qb}`;
+                                
+                                const weight = 1 + (1 - distFromCenter / radius) * 2;
+                                colorMap.set(key, (colorMap.get(key) || 0) + weight);
+                            }
+                        }
+                        
+                        const sortedColors = Array.from(colorMap.entries())
+                            .sort((a, b) => b[1] - a[1])
+                            .slice(0, 10)
+                            .map(([key]) => {
+                                const [r, g, b] = key.split(',').map(Number);
+                                return { r, g, b };
+                            });
+                        
+                        if (sortedColors.length === 0) {
+                            reject(new Error('No colors found'));
+                            return;
+                        }
+                        
+                        const primary = sortedColors[0];
+                        let maxContrast = 0;
+                        let secondary = sortedColors[1] || primary;
+                        let accent = sortedColors[2] || primary;
+                        
+                        sortedColors.forEach(color => {
+                            const contrast = Math.abs(primary.r - color.r) + 
+                                           Math.abs(primary.g - color.g) + 
+                                           Math.abs(primary.b - color.b);
+                            if (contrast > maxContrast) {
+                                maxContrast = contrast;
+                                secondary = color;
+                            }
+                        });
+                        
+                        sortedColors.forEach(color => {
+                            const contrast1 = Math.abs(primary.r - color.r) + 
+                                             Math.abs(primary.g - color.g) + 
+                                             Math.abs(primary.b - color.b);
+                            const contrast2 = Math.abs(secondary.r - color.r) + 
+                                             Math.abs(secondary.g - color.g) + 
+                                             Math.abs(secondary.b - color.b);
+                            if (contrast1 > 100 && contrast2 > 100) {
+                                accent = color;
+                            }
+                        });
+                        
+                        resolve({
+                            primary: `rgb(${primary.r}, ${primary.g}, ${primary.b})`,
+                            secondary: `rgb(${secondary.r}, ${secondary.g}, ${secondary.b})`,
+                            accent: `rgb(${accent.r}, ${accent.g}, ${accent.b})`,
+                            light: `rgb(${Math.min(255, primary.r + 50)}, ${Math.min(255, primary.g + 50)}, ${Math.min(255, primary.b + 50)})`,
+                            dark: `rgb(${Math.max(0, primary.r - 50)}, ${Math.max(0, primary.g - 50)}, ${Math.max(0, primary.b - 50)})`
+                        });
+                    } catch (e) {
+                        reject(e);
+                    }
+                };
+                
+                img.onload = loadHandler;
+                img.onerror = () => reject(new Error('Image load failed'));
+                
+                if (img.complete && img.naturalWidth > 0) {
+                    loadHandler();
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const images = document.querySelectorAll('.project-page-image');
+            const actualImages = Array.from(images).filter(img => img.tagName === 'IMG');
+            if (actualImages.length > 0) {
+                try {
+                    const colors = await extractColorsFromImage(actualImages[0]);
+                    
+                    document.documentElement.style.setProperty('--project-primary', colors.primary);
+                    document.documentElement.style.setProperty('--project-secondary', colors.secondary);
+                    document.documentElement.style.setProperty('--project-accent', colors.accent);
+                    document.documentElement.style.setProperty('--project-light', colors.light);
+                    document.documentElement.style.setProperty('--project-dark', colors.dark);
+                    
+                    document.body.style.background = `linear-gradient(135deg, ${colors.light} 0%, rgba(255, 255, 255, 0.9) 50%, ${colors.light} 100%)`;
+                    
+                    const header = document.querySelector('.project-page-header');
+                    if (header) {
+                        header.style.background = `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)`;
+                    }
+                    
+                    
+                    const links = document.querySelectorAll('.project-page-link');
+                    links.forEach(link => {
+                        link.style.background = `linear-gradient(135deg, ${colors.accent} 0%, ${colors.secondary} 100%)`;
+                        link.style.color = '#ffffff';
+                    });
+                    
+                    const labels = document.querySelectorAll('.info-label');
+                    labels.forEach(label => {
+                        label.style.color = colors.secondary;
+                        label.style.opacity = '1';
+                    });
+                    
+                    const values = document.querySelectorAll('.info-value');
+                    values.forEach(value => {
+                        value.style.color = colors.dark;
+                    });
+                    
+                    const h2 = document.querySelector('.project-page-info h2');
+                    if (h2) {
+                        h2.style.color = colors.primary;
+                    }
+                } catch (e) {
+                    console.log('Using default theme colors', e);
+                    const header = document.querySelector('.project-page-header');
+                    if (header) {
+                        header.style.background = 'var(--project-primary)';
+                    }
+                }
+            } else {
+                const header = document.querySelector('.project-page-header');
+                if (header) {
+                    header.style.background = 'var(--project-primary)';
+                }
+            }
+        });
+    </script>
+    
+    <!-- ColorThief Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.2/color-thief.umd.js"></script>
+    
+    <!-- Dynamic Theming Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const images = document.querySelectorAll('.project-page-image');
+            const actualImages = Array.from(images).filter(img => img.tagName === 'IMG');
+            
+            // Check if we're running from file:// protocol (local files)
+            const isFileProtocol = window.location.protocol === 'file:';
+            
+            if (actualImages.length > 0 && typeof ColorThief !== 'undefined' && !isFileProtocol) {
+                const colorThief = new ColorThief();
+                const mainImage = actualImages[0];
+                
+                function applyDynamicTheme() {
+                    try {
+                        // Check if image source is from file:// protocol
+                        if (mainImage.src && mainImage.src.startsWith('file://')) {
+                            throw new Error('File protocol detected');
+                        }
+                        
+                        // Set crossOrigin attribute to avoid CORS issues
+                        if (!mainImage.crossOrigin && !mainImage.src.startsWith('file://')) {
+                            mainImage.crossOrigin = 'anonymous';
+                        }
+                        
+                        const dominantColor = colorThief.getColor(mainImage);
+                        const rgbString = `rgb(${dominantColor[0]}, ${dominantColor[1]}, ${dominantColor[2]})`;
+                        
+                        const palette = colorThief.getPalette(mainImage, 5);
+                        
+                        document.documentElement.style.setProperty('--theme-primary', rgbString);
+                        
+                        if (palette && palette.length > 1) {
+                            const secondary = palette[1];
+                            document.documentElement.style.setProperty('--theme-secondary', `rgb(${secondary[0]}, ${secondary[1]}, ${secondary[2]})`);
+                            
+                            if (palette.length > 2) {
+                                const accent = palette[2];
+                                document.documentElement.style.setProperty('--theme-accent', `rgb(${accent[0]}, ${accent[1]}, ${accent[2]})`);
+                            }
+                        }
+                        
+                        const brightness = Math.round(((dominantColor[0] * 299) +
+                                          (dominantColor[1] * 587) +
+                                          (dominantColor[2] * 114)) / 1000);
+                        
+                        if (brightness > 125) {
+                            document.documentElement.style.setProperty('--theme-text', '#000000');
+                        } else {
+                            document.documentElement.style.setProperty('--theme-text', '#ffffff');
+                        }
+                        
+                        const lightR = Math.min(255, dominantColor[0] + 50);
+                        const lightG = Math.min(255, dominantColor[1] + 50);
+                        const lightB = Math.min(255, dominantColor[2] + 50);
+                        document.documentElement.style.setProperty('--theme-bg-muted', `rgb(${lightR}, ${lightG}, ${lightB})`);
+                        
+                        const header = document.querySelector('.project-page-header');
+                        if (header && palette && palette.length > 1) {
+                            const secondary = palette[1];
+                            header.style.background = `linear-gradient(135deg, ${rgbString} 0%, rgb(${secondary[0]}, ${secondary[1]}, ${secondary[2]}) 100%)`;
+                        } else if (header) {
+                            header.style.background = rgbString;
+                        }
+                        
+                        const links = document.querySelectorAll('.project-page-link');
+                        links.forEach(link => {
+                            if (palette && palette.length > 2) {
+                                const accent = palette[2];
+                                link.style.background = `rgb(${accent[0]}, ${accent[1]}, ${accent[2]})`;
+                            } else {
+                                link.style.background = rgbString;
+                            }
+                        });
+                        
+                        const labels = document.querySelectorAll('.info-label');
+                        labels.forEach(label => {
+                            if (palette && palette.length > 1) {
+                                const secondary = palette[1];
+                                label.style.color = `rgb(${secondary[0]}, ${secondary[1]}, ${secondary[2]})`;
+                            }
+                        });
+                        
+                        const h2 = document.querySelector('.project-page-info h2');
+                        if (h2) {
+                            h2.style.color = rgbString;
+                        }
+                    } catch (e) {
+                        // Silently use default colors - no console error needed
+                        const header = document.querySelector('.project-page-header');
+                        if (header) {
+                            header.style.background = 'var(--project-primary)';
+                        }
+                    }
+                }
+                
+                if (mainImage.complete) {
+                    applyDynamicTheme();
+                } else {
+                    mainImage.addEventListener('load', applyDynamicTheme);
+                }
+            } else {
+                // Use default colors if file protocol or no ColorThief
+                const header = document.querySelector('.project-page-header');
+                if (header) {
+                    header.style.background = 'var(--project-primary)';
+                }
+            }
+        });
+    </script>
+    <script src="image-compat.js"></script>
+</body>
+</html>
+
