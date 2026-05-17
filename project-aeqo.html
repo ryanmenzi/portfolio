@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AEQO Branding Project - Ryan Menzildjian</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Archivo+Black&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        @font-face {
+            font-family: "AEQO Neoblast";
+            src: url("AEQO Branding Project/Neoblast-Regular-Demo.otf") format("opentype");
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: "AEQO Magda";
+            src: url("AEQO Branding Project/MagdaCleanMono Regular.otf") format("opentype");
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: "AEQO Magda";
+            src: url("AEQO Branding Project/FF Magda Clean Mono OT Bold.ttf") format("truetype");
+            font-weight: 700;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: "AEQO Magda";
+            src: url("AEQO Branding Project/MagdaCleanMono Black Regular.otf") format("opentype");
+            font-weight: 900;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        :root {
+            --aeqo-black: #060607;
+            --aeqo-near-black: #181415;
+            --aeqo-yellow: #f7ec00;
+            --aeqo-white: #ebebec;
+            --aeqo-soft: #464141;
+        }
+
+        html, body {
+            height: auto;
+            min-height: 0;
+        }
+
+        body {
+            margin: 0;
+            background:
+                radial-gradient(circle at 15% 16%, rgba(247, 236, 0, 0.25) 0%, rgba(247, 236, 0, 0) 36%),
+                radial-gradient(circle at 84% 72%, rgba(247, 236, 0, 0.2) 0%, rgba(247, 236, 0, 0) 38%),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0) 30%),
+                var(--aeqo-black);
+            color: var(--aeqo-white);
+            overflow-x: hidden;
+            overflow-y: auto;
+            font-family: "AEQO Magda", "Inter", system-ui, -apple-system, sans-serif;
+            position: relative;
+            padding-bottom: 0;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background:
+                repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.03) 0 1px, transparent 1px 38px),
+                repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.02) 0 1px, transparent 1px 38px);
+            opacity: 0.35;
+            z-index: 0;
+        }
+
+        .halftone-bg {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            transform-style: preserve-3d;
+            perspective: 1200px;
+            overflow: hidden;
+        }
+
+        .halftone-bg::before,
+        .halftone-bg::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background-image: radial-gradient(circle, rgba(247, 236, 0, 0.9) 0 1.25px, transparent 1.35px);
+            background-size: 18px 18px;
+            opacity: 0.055;
+            will-change: transform;
+        }
+
+        .halftone-bg::before {
+            transform: rotate(-8deg) perspective(1200px) rotateX(68deg) translate3d(-4%, -8%, 0) scale(1.14);
+            animation: halftoneFloatA 28s linear infinite;
+        }
+
+        .halftone-bg::after {
+            background-size: 24px 24px;
+            opacity: 0.038;
+            filter: blur(0.4px);
+            transform: rotate(7deg) perspective(1200px) rotateX(74deg) translate3d(6%, 10%, 0) scale(1.28);
+            animation: halftoneFloatB 34s linear infinite reverse;
+        }
+
+        @keyframes halftoneFloatA {
+            0% { transform: rotate(-8deg) perspective(1200px) rotateX(68deg) translate3d(-4%, -8%, 0) scale(1.14); }
+            50% { transform: rotate(-5deg) perspective(1200px) rotateX(66deg) translate3d(2%, 4%, 0) scale(1.1); }
+            100% { transform: rotate(-8deg) perspective(1200px) rotateX(68deg) translate3d(-4%, -8%, 0) scale(1.14); }
+        }
+
+        @keyframes halftoneFloatB {
+            0% { transform: rotate(7deg) perspective(1200px) rotateX(74deg) translate3d(6%, 10%, 0) scale(1.28); }
+            50% { transform: rotate(10deg) perspective(1200px) rotateX(70deg) translate3d(-3%, -2%, 0) scale(1.22); }
+            100% { transform: rotate(7deg) perspective(1200px) rotateX(74deg) translate3d(6%, 10%, 0) scale(1.28); }
+        }
+
+        .spark-node {
+            opacity: 0;
+            transform: translateY(6px);
+            filter: brightness(0.45) saturate(0.75);
+            will-change: opacity, transform, filter;
+        }
+
+        .spark-node.spark-active {
+            animation: sparkIgnite var(--spark-duration, 820ms) var(--spark-delay, 0ms) linear forwards;
+        }
+
+        @keyframes sparkIgnite {
+            0% {
+                opacity: 0;
+                transform: translateY(8px);
+                filter: brightness(0.2) saturate(0.65);
+            }
+            12% {
+                opacity: 0.28;
+                filter: brightness(1.45) saturate(1.15);
+            }
+            20% {
+                opacity: 0.08;
+                filter: brightness(0.35) saturate(0.7);
+            }
+            34% {
+                opacity: 0.74;
+                filter: brightness(1.2) saturate(1.05);
+            }
+            44% {
+                opacity: 0.22;
+                filter: brightness(0.6) saturate(0.8);
+            }
+            62% {
+                opacity: 0.88;
+                filter: brightness(1.12) saturate(1.02);
+            }
+            74% {
+                opacity: 0.66;
+                filter: brightness(0.92) saturate(0.96);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+                filter: brightness(1) saturate(1);
+            }
+        }
+
+        .project-page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            padding: 20px 40px;
+            background: rgba(6, 6, 7, 0.92);
+            border-bottom: 1px solid rgba(247, 236, 0, 0.35);
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            backdrop-filter: blur(6px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+        }
+
+        .project-page-header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--aeqo-yellow);
+            letter-spacing: 0.5px;
+            font-family: "AEQO Neoblast", "Archivo Black", sans-serif;
+        }
+
+        .back-link {
+            color: var(--aeqo-white);
+            text-decoration: none;
+            border: 1px solid rgba(235, 235, 236, 0.5);
+            padding: 8px 14px;
+            transition: 0.2s ease;
+        }
+
+        .pdf-open-link,
+        .pdf-toc-item,
+        .pdf-toc-link {
+            position: relative;
+            overflow: hidden;
+            isolation: isolate;
+            --led-pulse-duration: 3.4s;
+            --led-pulse-delay: 0s;
+            --led-sweep-duration: 4.8s;
+            --led-sweep-delay: 0s;
+            --led-blink-duration: 2.9s;
+            --led-blink-delay: 0s;
+            animation: ledPulse var(--led-pulse-duration) ease-in-out infinite;
+            animation-delay: var(--led-pulse-delay);
+        }
+
+        .pdf-open-link::before,
+        .pdf-toc-item::before,
+        .pdf-toc-link::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -120%;
+            width: 72%;
+            height: 100%;
+            background: linear-gradient(95deg, transparent 0%, rgba(247, 236, 0, 0.42) 52%, transparent 100%);
+            opacity: 0.65;
+            z-index: -1;
+            animation: ledSweep var(--led-sweep-duration) linear infinite;
+            animation-delay: var(--led-sweep-delay);
+        }
+
+        .pdf-open-link::after,
+        .pdf-toc-item::after,
+        .pdf-toc-link::after {
+            content: "";
+            position: absolute;
+            inset: -1px;
+            border: 1px solid rgba(247, 236, 0, 0.22);
+            opacity: 0.2;
+            z-index: -1;
+            animation: ledBlink var(--led-blink-duration) step-end infinite;
+            animation-delay: var(--led-blink-delay);
+        }
+
+        .back-link:hover {
+            background: var(--aeqo-yellow);
+            color: var(--aeqo-black);
+            border-color: var(--aeqo-yellow);
+        }
+
+        .project-page-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 36px 36px 16px;
+            display: grid;
+            gap: 34px;
+            position: relative;
+            z-index: 1;
+            margin-bottom: 0;
+        }
+
+        .hero-panel {
+            padding: 24px 0 0;
+            position: relative;
+            display: grid;
+            gap: 12px;
+        }
+
+        .hero-panel::after {
+            content: "";
+            width: 280px;
+            max-width: 70vw;
+            height: 3px;
+            background: linear-gradient(90deg, var(--aeqo-yellow), rgba(247, 236, 0, 0));
+        }
+
+        .hero-kicker {
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 1.8px;
+            font-size: 12px;
+            color: var(--aeqo-white);
+            border: 1px solid rgba(247, 236, 0, 0.35);
+            width: fit-content;
+            padding: 6px 10px;
+            background: rgba(247, 236, 0, 0.08);
+        }
+
+        .hero-title {
+            margin: 0;
+            font-size: clamp(52px, 11vw, 120px);
+            line-height: 0.9;
+            letter-spacing: 2.8px;
+            font-weight: 400;
+            color: var(--aeqo-yellow);
+            font-family: "AEQO Neoblast", "Archivo Black", sans-serif;
+            text-shadow: 0 0 28px rgba(247, 236, 0, 0.22);
+        }
+
+        .hero-subtitle {
+            margin: 0;
+            font-size: 18px;
+            color: var(--aeqo-white);
+            font-family: "AEQO Magda", "Inter", sans-serif;
+            letter-spacing: 0.5px;
+        }
+
+        .project-page-info {
+            background: transparent;
+            border: none;
+            padding: 0;
+        }
+
+        .project-page-info h2 {
+            margin: 0 0 24px;
+            color: var(--aeqo-yellow);
+            font-size: 30px;
+            font-family: "AEQO Neoblast", "Archivo Black", sans-serif;
+            font-weight: 400;
+            padding-top: 16px;
+            border-top: 1px solid rgba(235, 235, 236, 0.25);
+            letter-spacing: 1.2px;
+        }
+
+        .project-info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 32px;
+        }
+
+        .project-info-column {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .info-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1.4px;
+            color: var(--aeqo-yellow);
+            font-weight: 700;
+        }
+
+        .info-value {
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--aeqo-white);
+            max-width: 56ch;
+        }
+
+        .info-value ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .pdf-panel {
+            background: transparent;
+            border: none;
+            padding: 0;
+            display: grid;
+            gap: 12px;
+            width: min(100%, 1220px);
+        }
+
+        .pdf-toolbar {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .pdf-toolbar-title {
+            margin: 0;
+            font-size: 17px;
+            color: var(--aeqo-yellow);
+            font-weight: 700;
+            font-family: "AEQO Magda", "Inter", sans-serif;
+        }
+
+        .pdf-open-link {
+            text-decoration: none;
+            color: var(--aeqo-black);
+            background: var(--aeqo-yellow);
+            padding: 8px 14px;
+            font-size: 13px;
+            font-weight: 700;
+            transition: transform 0.2s ease;
+        }
+
+        .pdf-open-link:hover {
+            transform: translateY(-2px);
+        }
+
+        .pdf-scroll-indicator {
+            font-size: 13px;
+            color: var(--aeqo-white);
+            letter-spacing: 0.4px;
+        }
+
+        .pdf-viewer-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 980px) 220px;
+            align-items: start;
+            gap: 18px;
+        }
+
+        .pdf-stage {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 8px;
+            overflow: hidden;
+            min-height: 0;
+            position: relative;
+            clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 22px 100%, 0 calc(100% - 22px));
+            border: 1px solid rgba(247, 236, 0, 0.22);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+            width: min(100%, 980px);
+            margin: 0;
+        }
+
+        .pdf-toc {
+            border-left: 1px solid rgba(247, 236, 0, 0.25);
+            padding-left: 14px;
+            display: grid;
+            gap: 8px;
+        }
+
+        .pdf-toc-title {
+            margin: 0 0 6px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.4px;
+            color: rgba(235, 235, 236, 0.85);
+        }
+
+        .pdf-toc-item {
+            background: transparent;
+            border: 1px solid rgba(247, 236, 0, 0.24);
+            color: var(--aeqo-white);
+            text-align: left;
+            font-family: "AEQO Magda", "Inter", sans-serif;
+            font-size: 12px;
+            line-height: 1.35;
+            padding: 8px 9px;
+            cursor: pointer;
+            transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+        }
+
+        .pdf-toc-item:hover,
+        .pdf-toc-item.active {
+            background: rgba(247, 236, 0, 0.16);
+            border-color: rgba(247, 236, 0, 0.55);
+            color: var(--aeqo-yellow);
+        }
+
+        .pdf-toc-link {
+            margin-top: 6px;
+            display: inline-block;
+            text-decoration: none;
+            background: rgba(247, 236, 0, 0.9);
+            color: var(--aeqo-black);
+            font-size: 12px;
+            font-weight: 700;
+            padding: 9px 10px;
+            border: 1px solid rgba(247, 236, 0, 0.9);
+            transition: transform 0.15s ease, background 0.15s ease;
+        }
+
+        .pdf-toc-link:hover {
+            transform: translateY(-1px);
+            background: var(--aeqo-yellow);
+        }
+
+        @keyframes ledPulse {
+            0%, 100% { box-shadow: 0 0 0 rgba(247, 236, 0, 0), 0 0 0 rgba(247, 236, 0, 0); }
+            45% { box-shadow: 0 0 8px rgba(247, 236, 0, 0.13), 0 0 18px rgba(247, 236, 0, 0.08); }
+            60% { box-shadow: 0 0 4px rgba(247, 236, 0, 0.08), 0 0 10px rgba(247, 236, 0, 0.05); }
+        }
+
+        @keyframes ledSweep {
+            0% { left: -120%; }
+            36% { left: 125%; }
+            100% { left: 125%; }
+        }
+
+        @keyframes ledBlink {
+            0%, 41%, 48%, 100% { opacity: 0.18; }
+            43%, 46% { opacity: 0.52; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .pdf-open-link,
+            .pdf-toc-item,
+            .pdf-toc-link,
+            .pdf-open-link::before,
+            .pdf-toc-item::before,
+            .pdf-toc-link::before,
+            .pdf-open-link::after,
+            .pdf-toc-item::after,
+            .pdf-toc-link::after {
+                animation: none !important;
+            }
+        }
+
+        .pdf-slide-image {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            object-fit: contain;
+            display: block;
+            background: #ffffff;
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.22s ease, transform 0.22s ease;
+        }
+
+        .pdf-slide-image.is-transitioning {
+            opacity: 0.35;
+            transform: translateY(6px);
+        }
+
+        .slide-link-hotspot {
+            position: absolute;
+            top: 6.15%;
+            left: 73.75%;
+            width: 13.95%;
+            height: 3.63%;
+            background: transparent;
+            text-decoration: none;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.15s ease;
+            z-index: 4;
+            cursor: pointer;
+        }
+
+        .slide-link-hotspot.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        @media (max-width: 980px) {
+            .project-page-content {
+                padding: 24px 18px 14px;
+            }
+
+            .project-page-header {
+                padding: 16px 18px;
+            }
+
+            .project-info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pdf-stage {
+                width: 100%;
+            }
+
+            .pdf-viewer-layout {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .pdf-toc {
+                border-left: none;
+                border-top: 1px solid rgba(247, 236, 0, 0.25);
+                padding-left: 0;
+                padding-top: 12px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .spark-node {
+                opacity: 1 !important;
+                transform: none !important;
+                filter: none !important;
+            }
+            .spark-node.spark-active {
+                animation: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="halftone-bg" aria-hidden="true"></div>
+    <header class="project-page-header">
+        <h1>AEQO Branding Project</h1>
+        <a href="index.html" class="back-link" id="back-to-portfolio">← Back to Portfolio</a>
+    </header>
+
+        <div class="project-page-content">
+            <section class="hero-panel">
+                <p class="hero-kicker">Brand Design Final Project</p>
+                <h2 class="hero-title">AEQO</h2>
+                <p class="hero-subtitle">Balance, Momentum, Accomplish</p>
+            </section>
+
+            <section class="project-page-info">
+                <h2>Project Details</h2>
+                <div class="project-info-grid">
+                    <div class="project-info-column">
+                        <div class="info-item">
+                            <div class="info-label">Services</div>
+                            <div class="info-value">
+                                <ul>
+                                    <li>Brand Strategy</li>
+                                    <li>Visual Identity Design</li>
+                                    <li>Touchpoint Mockups</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Client</div>
+                            <div class="info-value">Brand Design Class Project</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">School / Location</div>
+                            <div class="info-value">Lorenzo de' Medici, Florence, Italy</div>
+                        </div>
+                    </div>
+                    <div class="project-info-column">
+                        <div class="info-item">
+                            <div class="info-label">Year</div>
+                            <div class="info-value">2026</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Credits</div>
+                            <div class="info-value">Concept, strategy, naming, narrative, and final visual system by Ryan Menzildjian.</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Info</div>
+                            <div class="info-value">AEQO is a brand concept for an app that helps ambitious students with executive dysfunction turn big responsibilities into small "quests" and earn distraction time through completed work.</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="pdf-panel">
+                <div class="pdf-toolbar">
+                    <h3 class="pdf-toolbar-title">Final Brand Proposal (PDF)</h3>
+                    <a class="pdf-open-link" href="AEQO Branding Project/AEQO - Brand Final Project.pdf" target="_blank" rel="noopener noreferrer">Open PDF in New Tab</a>
+                </div>
+                <div class="pdf-scroll-indicator" id="pdf-page-indicator">Scroll to switch slides — Page 1 / 25</div>
+            <div class="pdf-viewer-layout">
+                <div class="pdf-stage" id="pdf-stage">
+                    <img class="pdf-slide-image" id="aeqo-slide-image" src="AEQO Branding Project/slides/page-0001.jpg" alt="AEQO project slide 1" data-page="1">
+                    <a id="slide-link-hotspot" class="slide-link-hotspot" href="https://www.figma.com/proto/OkChkUW3XPvBfqwaw4cQdJ/AEQO-Brand-Webpage?node-id=0-1&t=fw2upkmFaSbhvmbJ-1" target="_blank" rel="noopener noreferrer" aria-label="Open AEQO Figma mockup"></a>
+                </div>
+                <aside class="pdf-toc" aria-label="AEQO presentation table of contents">
+                    <p class="pdf-toc-title">Table of Contents</p>
+                    <button type="button" class="pdf-toc-item" data-page="1">Brief</button>
+                    <button type="button" class="pdf-toc-item" data-page="4">Research</button>
+                    <button type="button" class="pdf-toc-item" data-page="6">Strategy</button>
+                    <button type="button" class="pdf-toc-item" data-page="9">Naming + Narrative</button>
+                    <button type="button" class="pdf-toc-item" data-page="13">Stylescape</button>
+                    <button type="button" class="pdf-toc-item" data-page="15">Logo</button>
+                    <button type="button" class="pdf-toc-item" data-page="17">Icon Set</button>
+                    <button type="button" class="pdf-toc-item" data-page="19">Typography</button>
+                    <button type="button" class="pdf-toc-item" data-page="22">Color Palette</button>
+                    <button type="button" class="pdf-toc-item" data-page="24">Touchpoints</button>
+                    <a class="pdf-toc-link" href="https://www.figma.com/proto/OkChkUW3XPvBfqwaw4cQdJ/AEQO-Brand-Webpage?node-id=0-1&t=fw2upkmFaSbhvmbJ-1" target="_blank" rel="noopener noreferrer">Open Figma Page</a>
+                </aside>
+                </div>
+            </section>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const totalPages = 25;
+            let currentPage = 1;
+            let wheelDeltaAccumulator = 0;
+            let isSwitching = false;
+            const wheelThreshold = 80;
+            const switchCooldownMs = 150;
+
+            const stage = document.getElementById("pdf-stage");
+            const slideImage = document.getElementById("aeqo-slide-image");
+            const pageIndicator = document.getElementById("pdf-page-indicator");
+            const slideHotspot = document.getElementById("slide-link-hotspot");
+            const tocItems = Array.from(document.querySelectorAll(".pdf-toc-item"));
+            const ledAnimatedControls = Array.from(document.querySelectorAll(".pdf-open-link, .pdf-toc-item, .pdf-toc-link"));
+            const sparkTargets = [
+                document.querySelector(".project-page-header"),
+                document.querySelector(".hero-panel"),
+                document.querySelector(".project-page-info"),
+                document.querySelector(".pdf-toolbar"),
+                document.querySelector(".pdf-scroll-indicator"),
+                document.querySelector(".pdf-stage"),
+                document.querySelector(".pdf-toc")
+            ].filter(Boolean);
+            const imageCache = new Map();
+
+            if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+                sparkTargets.forEach((target) => {
+                    const delayMs = 90 + Math.random() * 1200;
+                    const durationMs = 560 + Math.random() * 520;
+                    target.classList.add("spark-node");
+                    target.style.setProperty("--spark-delay", `${delayMs.toFixed(0)}ms`);
+                    target.style.setProperty("--spark-duration", `${durationMs.toFixed(0)}ms`);
+                });
+                requestAnimationFrame(() => {
+                    sparkTargets.forEach((target) => target.classList.add("spark-active"));
+                });
+            }
+
+            ledAnimatedControls.forEach((control) => {
+                const pulseDuration = (2.8 + Math.random() * 2.3).toFixed(2);
+                const sweepDuration = (4.1 + Math.random() * 2.7).toFixed(2);
+                const blinkDuration = (2.2 + Math.random() * 2.0).toFixed(2);
+
+                const pulseDelay = (-Math.random() * Number(pulseDuration)).toFixed(2);
+                const sweepDelay = (-Math.random() * Number(sweepDuration)).toFixed(2);
+                const blinkDelay = (-Math.random() * Number(blinkDuration)).toFixed(2);
+
+                control.style.setProperty("--led-pulse-duration", `${pulseDuration}s`);
+                control.style.setProperty("--led-pulse-delay", `${pulseDelay}s`);
+                control.style.setProperty("--led-sweep-duration", `${sweepDuration}s`);
+                control.style.setProperty("--led-sweep-delay", `${sweepDelay}s`);
+                control.style.setProperty("--led-blink-duration", `${blinkDuration}s`);
+                control.style.setProperty("--led-blink-delay", `${blinkDelay}s`);
+            });
+
+            function slidePath(pageNumber) {
+                return `AEQO Branding Project/slides/page-${String(pageNumber).padStart(4, "0")}.jpg`;
+            }
+
+            function updateIndicator() {
+                if (!pageIndicator) {
+                    return;
+                }
+                pageIndicator.textContent = `Scroll to switch slides — Page ${currentPage} / ${totalPages}`;
+            }
+
+            function updateTocState(pageNumber) {
+                if (!tocItems.length) {
+                    return;
+                }
+                let activeIndex = 0;
+                tocItems.forEach((item, index) => {
+                    const itemPage = Number(item.dataset.page || "1");
+                    if (pageNumber >= itemPage) {
+                        activeIndex = index;
+                    }
+                });
+                tocItems.forEach((item, index) => {
+                    item.classList.toggle("active", index === activeIndex);
+                });
+            }
+
+            function renderSlide(pageNumber) {
+                if (!slideImage) {
+                    return;
+                }
+                const nextPage = Math.max(1, Math.min(totalPages, pageNumber));
+                const shownPage = Number(slideImage.dataset.page || "1");
+                currentPage = nextPage;
+
+                if (slideHotspot) {
+                    slideHotspot.classList.toggle("active", nextPage === totalPages);
+                }
+
+                if (nextPage === shownPage) {
+                    updateIndicator();
+                    updateTocState(nextPage);
+                    return;
+                }
+
+                isSwitching = true;
+                const nextSrc = slidePath(nextPage);
+                slideImage.classList.add("is-transitioning");
+
+                const preload = imageCache.get(nextPage) || new Image();
+                preload.onload = () => {
+                    slideImage.src = nextSrc;
+                    slideImage.alt = `AEQO project slide ${nextPage}`;
+                    slideImage.dataset.page = String(nextPage);
+                    requestAnimationFrame(() => {
+                        slideImage.classList.remove("is-transitioning");
+                    });
+                    window.setTimeout(() => {
+                        isSwitching = false;
+                    }, switchCooldownMs);
+                };
+
+                preload.onerror = () => {
+                    slideImage.classList.remove("is-transitioning");
+                    isSwitching = false;
+                    if (pageIndicator) {
+                        pageIndicator.textContent = "Could not load slide preview. Use Open PDF in New Tab.";
+                    }
+                };
+
+                imageCache.set(nextPage, preload);
+                preload.src = nextSrc;
+                updateIndicator();
+                updateTocState(nextPage);
+
+                const previousNeighbor = nextPage > 1 ? nextPage - 1 : 0;
+                const nextNeighbor = nextPage < totalPages ? nextPage + 1 : 0;
+                [previousNeighbor, nextNeighbor].forEach((neighbor) => {
+                    if (!neighbor || imageCache.has(neighbor)) {
+                        return;
+                    }
+                    const img = new Image();
+                    img.src = slidePath(neighbor);
+                    imageCache.set(neighbor, img);
+                });
+            }
+
+            stage?.addEventListener("wheel", (event) => {
+                event.preventDefault();
+                if (isSwitching) {
+                    return;
+                }
+                wheelDeltaAccumulator += event.deltaY;
+
+                if (Math.abs(wheelDeltaAccumulator) < wheelThreshold) {
+                    return;
+                }
+
+                if (wheelDeltaAccumulator > 0) {
+                    renderSlide(currentPage + 1);
+                } else {
+                    renderSlide(currentPage - 1);
+                }
+                wheelDeltaAccumulator = 0;
+            }, { passive: false });
+
+            slideImage?.addEventListener("error", () => {
+                if (pageIndicator) {
+                    pageIndicator.textContent = "Could not load slide preview. Use Open PDF in New Tab.";
+                }
+            });
+
+            tocItems.forEach((item) => {
+                item.addEventListener("click", () => {
+                    const targetPage = Number(item.dataset.page || "1");
+                    renderSlide(targetPage);
+                    wheelDeltaAccumulator = 0;
+                });
+            });
+
+            renderSlide(1);
+        });
+    </script>
+    <script src="image-compat.js"></script>
+</body>
+</html>

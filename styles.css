@@ -382,13 +382,12 @@ body {
 .projects-content {
     max-width: 1600px;
     margin: 0 auto;
-    padding: clamp(30px, 5vw, 80px) clamp(15px, 3vw, 40px);
+    padding: clamp(20px, 3vw, 44px) clamp(15px, 3vw, 40px) clamp(12px, 2vw, 24px);
     flex: 1;
     display: flex;
     gap: clamp(30px, 4vw, 60px);
-    overflow-y: auto;
-    overflow-x: visible;
-    max-height: calc(100vh - 150px);
+    overflow: hidden;
+    max-height: 100vh;
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none; /* IE and Edge */
 }
@@ -465,14 +464,46 @@ body {
 .projects-main {
     flex: 1;
     min-width: 0;
+    position: relative;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: calc(100vh - 56px);
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.projects-main::-webkit-scrollbar {
+    display: none;
 }
 
 .projects-title {
     font-size: clamp(48px, 8vw, 80px);
     font-weight: 700;
     color: var(--green-dark);
-    margin-bottom: 60px;
+    margin: 0 0 26px;
     text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background-color: var(--beige);
+    background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.02) 2px, rgba(0,0,0,0.02) 4px),
+        repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,0,0,0.02) 2px, rgba(0,0,0,0.02) 4px);
+    padding: 8px 0 14px;
+}
+
+.projects-title::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -30px;
+    height: 30px;
+    background-color: var(--beige);
+    background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.02) 2px, rgba(0,0,0,0.02) 4px),
+        repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,0,0,0.02) 2px, rgba(0,0,0,0.02) 4px);
+    pointer-events: none;
 }
 
 .projects-grid {
@@ -583,6 +614,55 @@ body {
     background: rgba(255, 255, 255, 0.45);
 }
 
+.aeqo-preview {
+    width: 100%;
+    min-height: 240px;
+    aspect-ratio: 16 / 10;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 26px 24px;
+    text-align: left;
+    background:
+        linear-gradient(145deg, rgba(247, 236, 0, 0.18) 0%, rgba(247, 236, 0, 0) 45%),
+        repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.04) 0 1px, transparent 1px 16px),
+        #060607;
+    color: #f7ec00;
+    transform: translateY(-22px);
+}
+
+.aeqo-preview-kicker {
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    font-weight: 700;
+    color: #ebebec;
+}
+
+.aeqo-preview-title {
+    font-size: clamp(28px, 3.8vw, 42px);
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: 1.8px;
+}
+
+.aeqo-preview-sub {
+    font-size: clamp(13px, 1.1vw, 15px);
+    font-weight: 500;
+    color: #ebebec;
+}
+
+.aeqo-preview-chip {
+    margin-top: 8px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #060607;
+    background: #f7ec00;
+}
+
 .project-card-link:hover .project-image-container img {
     filter: brightness(0.95);
 }
@@ -611,6 +691,75 @@ body {
     color: var(--text-dark);
     line-height: 1.6;
     margin-bottom: 20px;
+}
+
+.project-meta-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.project-meta-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    backdrop-filter: blur(6px);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.45px;
+    text-transform: uppercase;
+    color: #1c242b;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22), 0 0 14px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.project-meta-tag.tag-year-2025 {
+    background: linear-gradient(135deg, rgba(120, 214, 255, 0.42) 0%, rgba(120, 214, 255, 0.22) 100%);
+    border-color: rgba(67, 181, 235, 0.48);
+}
+
+.project-meta-tag.tag-year-2026 {
+    background: linear-gradient(135deg, rgba(145, 190, 255, 0.42) 0%, rgba(145, 190, 255, 0.22) 100%);
+    border-color: rgba(88, 142, 236, 0.5);
+}
+
+.project-meta-tag.tag-figma {
+    background: linear-gradient(135deg, rgba(255, 111, 97, 0.42) 0%, rgba(177, 92, 255, 0.22) 100%);
+    border-color: rgba(209, 92, 130, 0.48);
+}
+
+.project-meta-tag.tag-illustrator {
+    background: linear-gradient(135deg, rgba(255, 180, 82, 0.45) 0%, rgba(255, 150, 42, 0.24) 100%);
+    border-color: rgba(226, 132, 40, 0.5);
+}
+
+.project-meta-tag.tag-photoshop {
+    background: linear-gradient(135deg, rgba(112, 174, 255, 0.45) 0%, rgba(80, 139, 255, 0.24) 100%);
+    border-color: rgba(70, 122, 235, 0.5);
+}
+
+.project-meta-tag.tag-indesign {
+    background: linear-gradient(135deg, rgba(255, 126, 189, 0.44) 0%, rgba(255, 91, 162, 0.24) 100%);
+    border-color: rgba(217, 80, 146, 0.5);
+}
+
+.project-meta-tag.tag-photography {
+    background: linear-gradient(135deg, rgba(178, 255, 130, 0.42) 0%, rgba(142, 235, 94, 0.22) 100%);
+    border-color: rgba(108, 195, 66, 0.48);
+}
+
+.project-meta-tag.tag-blender {
+    background: linear-gradient(135deg, rgba(255, 172, 92, 0.45) 0%, rgba(95, 171, 255, 0.24) 100%);
+    border-color: rgba(88, 145, 230, 0.5);
+}
+
+.project-card-link:hover .project-meta-tag {
+    transform: translateY(-1px);
+    filter: saturate(1.08);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22), 0 0 18px rgba(0, 0, 0, 0.12);
 }
 
 .project-links {
@@ -747,10 +896,10 @@ body.projects-revealed .top-section .header-nav {
     grid-template-columns: 1fr 1fr;
     gap: clamp(40px, 5vw, 80px);
     align-items: center;
-    padding: clamp(40px, 5vw, 80px) clamp(15px, 3vw, 40px);
+    padding: clamp(28px, 4vw, 56px) clamp(15px, 3vw, 40px) clamp(18px, 3vw, 28px);
     flex: 1;
     justify-content: center;
-    min-height: calc(100vh - 80px);
+    min-height: auto;
 }
 
 .left-content {
